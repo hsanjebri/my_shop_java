@@ -151,7 +151,7 @@ public class InstructorService implements CrudInterface<Instructor> {
                 instructor.setYearsOfExperience(rs.getInt("yearsOfExperience"));
 
             }
-            cnx.close();
+           
         } catch (Exception e) {
             System.out.println(e);
         }

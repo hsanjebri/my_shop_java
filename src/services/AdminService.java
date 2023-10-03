@@ -137,7 +137,7 @@ public class AdminService implements CrudInterface<Admin> {
                 admin.setRegistrationDate(rs.getDate("registrationDate"));
 
             }
-            cnx.close();
+           
         } catch (Exception e) {
             System.out.println(e);
         }

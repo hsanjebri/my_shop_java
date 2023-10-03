@@ -154,7 +154,7 @@ public class StudentService implements CrudInterface<Student> {
                 student.setMajor(rs.getString("major"));
 
             }
-            cnx.close();
+           
         } catch (Exception e) {
             System.out.println(e);
         }
