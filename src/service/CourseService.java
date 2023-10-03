@@ -64,11 +64,49 @@ public class CourseService {
         }
     }
 
-    public List<Course> getAllCourses() {
-        List<Course> courseList = new ArrayList<>();
-        String query = "SELECT * FROM course";
-        try (Statement st = cnx.createStatement(); ResultSet rs = st.executeQuery(query)) {
-            while (rs.next()) {
+  public List<Course> getAllCourses() {
+    List<Course> courseList = new ArrayList<>();
+    String query = "SELECT * FROM course";
+    try (Statement st = cnx.createStatement(); ResultSet rs = st.executeQuery(query)) {
+        while (rs.next()) {
+            Course course = new Course(
+                    rs.getLong("courseId"),
+                    rs.getString("title"),
+                    rs.getString("description"),
+                    rs.getFloat("price"),
+                    rs.getString("image"),
+                    rs.getBoolean("isActive"),
+                    rs.getDate("updatedAt"),
+                    rs.getDate("createdAt"),
+                    null // Initialize courseContent as null for now
+            );
+            // Fetch the courseContent as a string from the database
+            String courseContentString = rs.getString("courseContent");
+            if (courseContentString != null) {
+                // Split the courseContentString into a List<String>
+                String[] courseContentArray = courseContentString.split(",");
+                List<String> courseContentList = Arrays.asList(courseContentArray);
+                course.setCourseContent(courseContentList);
+            } else {
+                // If courseContent is null in the database, set an empty list
+                course.setCourseContent(new ArrayList<>());
+            }
+            courseList.add(course);
+        }
+    } catch (SQLException ex) {
+        System.err.println(ex.getMessage());
+    }
+    return courseList;
+}
+  
+  
+  
+  public Course findById(long courseId) {
+    String query = "SELECT * FROM course WHERE courseId=?";
+    try (PreparedStatement pst = cnx.prepareStatement(query)) {
+        pst.setLong(1, courseId);
+        try (ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
                 Course course = new Course(
                         rs.getLong("courseId"),
                         rs.getString("title"),
@@ -78,18 +116,44 @@ public class CourseService {
                         rs.getBoolean("isActive"),
                         rs.getDate("updatedAt"),
                         rs.getDate("createdAt"),
-                        rs.getObject("courseContent",List.class)
+                        null // Initialize courseContent as null for now
                 );
-                course.setUpdatedAt(rs.getObject("updatedAt", java.util.Date.class));
-                course.setCreatedAt(rs.getObject("createdAt", java.util.Date.class));
-                String[] courseContentArray = rs.getString("courseContent").split(",");
-                course.setCourseContent(Arrays.asList(courseContentArray));
-                courseList.add(course);
+                // Fetch the courseContent as a string from the database
+                String courseContentString = rs.getString("courseContent");
+                if (courseContentString != null) {
+                    // Split the courseContentString into a List<String>
+                    String[] courseContentArray = courseContentString.split(",");
+                    List<String> courseContentList = Arrays.asList(courseContentArray);
+                    course.setCourseContent(courseContentList);
+                } else {
+                    // If courseContent is null in the database, set an empty list
+                    course.setCourseContent(new ArrayList<>());
+                }
+                return course;
+            } else {
+                return null; // Course not found
             }
-        } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
         }
-        return courseList;
+    } catch (SQLException ex) {
+        System.err.println(ex.getMessage());
+        return null; // Handle the exception appropriately in your application
     }
+}
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
 }
 

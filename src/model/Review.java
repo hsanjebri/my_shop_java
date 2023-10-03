@@ -1,5 +1,6 @@
 package model;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class Review {
     private long reviewId;
@@ -8,16 +9,20 @@ public class Review {
     private int rating; // Rating out of 5 or 10
     private String commentTitle;
     private String commentContent;
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
-    public Review(long reviewId, long courseId, String reviewerName, int rating, String commentTitle, String commentContent) {
+    public Review(long reviewId, long courseId, String reviewerName, int rating, String commentTitle, String commentContent,Date createdAt) {
         this.reviewId = reviewId;
         this.courseId = courseId;
         this.reviewerName = reviewerName;
         this.rating = rating;
         this.commentTitle = commentTitle;
         this.commentContent = commentContent;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = createdAt;
+    }
+
+    public Review(long aLong, long aLong0, String string, int aInt, String string0, String string1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     // Getters and Setters for all fields
@@ -70,14 +75,14 @@ public class Review {
         this.commentContent = commentContent;
     }
 
-    public LocalDateTime getCreatedAt() {
+     public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
+    
     @Override
     public String toString() {
         return "Review{" +
